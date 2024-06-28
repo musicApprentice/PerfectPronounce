@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         res.json(assignments);
     } catch (err) {
         res.status(500).json({ message: err.message });
-        console.log("classes have no contents")
+        console.log("assignment have no contents")
 
     }
 });
@@ -24,10 +24,10 @@ router.post('/', async (req, res) => {
     try {
         const newAssignment = await newAssign.save();
         res.status(201).json(newAssignment);
-        console.log("created new user")
+        console.log("created new assignment")
     } catch (err) {
         res.status(400).json({ message: err.message });
-        console.log("error created new user")
+        console.log("error created new assignment")
     }
 });
 
@@ -37,10 +37,10 @@ router.delete('delete based on name and card', async (req, res) => {
         const cardNo = req.params.card;
         const delAssign = await assignment.findOne({$and:[{name: nameNo}, {card: cardNo}]});
         if (delAssign === null) {
-            return res.status(404).json({ message: "Class not found" });
+            return res.status(404).json({ message: "Assignment not found" });
         }
         await assignment.deleteOne(delAssign);
-        res.json({ message: "Deleted Class" });
+        res.json({ message: "Deleted Assignment" });
     } catch (err) {
         res.status(500).json({ message: `Internal server error: ${err.message}` });
     }
