@@ -26,10 +26,10 @@ router.post('/', async (req, res) => {
     try {
         const classSaved = await newClass.save();
         res.status(201).json(classSaved);
-        console.log("created new user")
+        console.log("created new Class")
     } catch (err) {
         res.status(400).json({ message: err.message });
-        console.log("error created new user")
+        console.log("error created new Class")
     }
 });
 
