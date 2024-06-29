@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import './UserList.css'
+// import './UserList.css'
 const UserList = () => {
     //create states
     const [users, setUsers] = useState([]);
     const [name, setName] = useState([]);
     const [email, setEmail] = useState([]);
-    const [age, setAge] = useState([]);
+    const [school, setSchool] = useState([]);
 
     useEffect(() => {
         fetchUsers();
@@ -25,7 +25,7 @@ const UserList = () => {
     const handleAddUser = (e) => {
         e.preventDefault();
 
-        const newUser = {name, email, age};
+        const newUser = {name, email, school};
 
         fetch("http://localhost:3000/api/users", {
             method: "POST",
@@ -42,7 +42,7 @@ const UserList = () => {
             setUsers([...users, data]);
             setName('');
             setEmail('');
-            setAge('');
+            setSchool('');
 
         })
         .catch(error => console.error("Error adding user", error))
@@ -78,9 +78,9 @@ const UserList = () => {
                 required
                 />
                 <input
-                type = "number"
-                placeholder = "Age"
-                onChange = {(e) => setAge(e.target.value)}
+                type = "text"
+                placeholder = "School"
+                onChange = {(e) => setSchool(e.target.value)}
                 required
                 />
                 <button type = "submit"> Add New User </button>
