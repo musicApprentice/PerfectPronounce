@@ -2,36 +2,35 @@ const express = require('express');
 const Class = require('../models/classSchema');
 const router = express.Router(); 
 
-router.get('/', async (req, res) => {
-    try {
-        const classes = await Class.find();
-        res.json(classes);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-        console.log("classes have no contents")
+router.route('/')
+    .get(async(req, res) => {
+        try {
+            const classes = await Class.find();
+            res.json(classes);
+        } catch (err) {
+            res.status(500).json({ message: err.message });
+            console.log("classes have no contents")
+    
+        }
+    })
+    .post(async (req, res) => {
+        const newClass = new Class({
+            name: req.body.name,
+            language: req.body.language,
+            id: req.body.id,
+            assignments : req.body.assignments,
+            users : req.body.users
+        });
+        try {
+            const classSaved = await newClass.save();
+            res.status(201).json(classSaved);
+            console.log("created new Class")
+        } catch (err) {
+            res.status(400).json({ message: err.message });
+            console.log("error created new Class")
+        }
+    })
 
-    }
-});
-
-router.post('/', async (req, res) => {
-    const newClass = new Class({
-        name: req.body.name,
-        language: req.body.language,
-        id: req.body.id,
-        assignments : req.body.assignments,
-        metrics : req.body.metrics,
-        students : req.body.students,
-        teachers : req.body.teachers,
-    });
-    try {
-        const classSaved = await newClass.save();
-        res.status(201).json(classSaved);
-        console.log("created new Class")
-    } catch (err) {
-        res.status(400).json({ message: err.message });
-        console.log("error created new Class")
-    }
-});
 
 router.delete('/id/:id', async (req, res) => {
     try {
