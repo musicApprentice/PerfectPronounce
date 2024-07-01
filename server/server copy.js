@@ -48,8 +48,9 @@ app.post("/api/users", async (req, res) => {
     const user = new User({
         name: req.body.name,
         email: req.body.email,
-        age: req.body.age
-
+        age: req.body.age,
+        school: req.body.school,
+        state: req.body.state
     });
     try {
         const newUser = await user.save();
