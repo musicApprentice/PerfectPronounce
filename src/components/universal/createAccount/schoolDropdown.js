@@ -59,9 +59,8 @@ const states = [
   { name: 'U.S. Virgin Islands', code: 'VI' }
 ];
 
-const SchoolDropdown = () => {
+const SchoolDropdown = ({selectedSchool, setSelectedSchool}) => {
   const [selectedState, setSelectedState] = useState('');
-  const [selectedSchool, setSelectedSchool] = useState('');
   const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -118,6 +117,8 @@ const SchoolDropdown = () => {
   const handleSchoolChange = (event) => {
     const school = event.target.value;
     setSelectedSchool(school);
+    console.log("school is set to", selectedSchool)
+
   };
 
   return (
@@ -143,7 +144,7 @@ const SchoolDropdown = () => {
           {loading ? (
             <p>Loading schools...</p>
           ) : (
-            <select id="schools" value={selectedSchool} onChange={handleSchoolChange}>
+            <select id="schools" value={selectedSchool} onChange={handleSchoolChange} required> 
               <option value="" disabled>Select a school</option>
               {schools.map((school, index) => (
                 <option key={index} value={school['school.name']}>
