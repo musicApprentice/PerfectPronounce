@@ -4,10 +4,18 @@ const classSchema = new mongoose.Schema({
     name: {type: String, required: true},
     language: {type: String, required: true},
     id :{type: String, required: true, unique: true},
-    assignments:[{type: mongoose.Schema.ObjectId, ref: 'Assignment'}],
-    //assignments is an array of assignment objects
-    users:[{type: mongoose.Schema.ObjectId, ref: 'User'}],
-    //users is an array of users, both teacher and student and admin
+    // Separate students, teachers, and admin, because it's
+    // to look at grades and such, and because I don't think we
+    // user type as long as we insert them into the correct collection
+    // We definitely need user type if we roll them all into one list, but that complicates things
+
+    // We also can go without these three fields if we want to, just have
+    // get them manually later on by finding all the users with the class in their course lists
+
+    // Alternatively, emails work too, instead of object Ids
+    students: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
+    teachers: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
+    admins: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
 
 })
 
