@@ -3,12 +3,15 @@ const mongoose = require('mongoose');
 
 //create userSchema
 const userSchema = new mongoose.Schema({
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
+
+    // Instead of a field with user type, just insert the users into the correct type collection
+    name: {type: String, required: true},
+    age: {type: Number, required: true},
     email: {type: String, required: true, unique: true},
     school: {type: String, required: true},
-    role: {type: String, required: true},
-
+    state: {type: String, required: true},
+    // Ids of classes user is enrolled into
+    courseList: [{type: mongoose.Schema.ObjectId}]
 })
 
 const User = mongoose.model("User", userSchema);

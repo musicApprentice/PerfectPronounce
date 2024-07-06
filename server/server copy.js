@@ -10,7 +10,8 @@ const port = 3000;
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json()); //Middleware to parse JSON bodies
 
-mongoose.connect("mongodb+srv://LanguageMaster:320@languagemastercluster.5xln7py.mongodb.net/", {
+const CONNECTIONSTRING = "mongodb+srv://mkandeshwarath:i0ZlJmFjH5yGRFmF@languagemaestro.uks1z9z.mongodb.net/?retryWrites=true&w=majority&appName=LanguageMaestro";
+mongoose.connect(CONNECTIONSTRING, {
     useNewUrlParser: true,
     useUnifiedTopology:true
 })
