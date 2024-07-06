@@ -15,20 +15,22 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    console.log(req.body)
     const user = new User({
-        name: req.body.name,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
-        age: req.body.age,
-        school: req.body.school,
-        state: req.body.state
+        school: req.body.selectedSchool,
+        role: req.body.role
     });
+
     try {
         const newUser = await user.save();
         res.status(201).json(newUser);
         console.log("created new user")
     } catch (err) {
         res.status(400).json({ message: err.message });
-        console.log("error created new user")
+        console.log("error creating new user")
     }
 });
 

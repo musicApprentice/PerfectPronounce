@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 //create userSchema
 const userSchema = new mongoose.Schema({
+
     // Instead of a field with user type, just insert the users into the correct type collection
     name: {type: String, required: true},
     age: {type: Number, required: true},
