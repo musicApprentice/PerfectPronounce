@@ -1,50 +1,69 @@
 const express = require('express');
-const assignment = require('../models/assignmentSchema');
+const { MongoClient } = require('mongodb');
+const connectionString = "mongodb+srv://mkandeshwarath:i0ZlJmFjH5yGRFmF@languagemaestro.uks1z9z.mongodb.net/?retryWrites=true&w=majority&appName=LanguageMaestro";
+const client = new MongoClient(connectionString);
 const router = express.Router(); 
+let db;
+    
 
-router.get('/', async (req, res) => {
+// helper function to connect to server
+async function connect_to_courses_test(){
+    await client.connect();
+    db = client.db("CoursesTest");
+}
+
+async function getAllAssignments () {
     try {
-        const assignments = await assignment.find();
-        res.json(assignments);
+      await connect_to_courses_test()
+        const assignment = await(db.collection("assignments").find().toArray());
+        return assignment;
     } catch (err) {
-        res.status(500).json({ message: err.message });
-        console.log("assignment have no contents")
+       console.log("Cannot access the database");
 
-    }
+    } 
+}
+// print out all the assignments in a particular class. 
+router.get('/', async(req, res) =>{
+    const assignments = await getAllAssignments();
+    res.send(assignments)
 });
+//
 
+// Add assignment to class
 router.post('/', async (req, res) => {
-    const newAssign = new assignment({
-        name: req.body.name,
-        card: req.body.card,
-        text: req.body.text,
-        translation : req.body.translation,
-        audio : req.body.audio,
-    });
+    const assignments = await getAllAssignments();
     try {
-        const newAssignment = await newAssign.save();
-        res.status(201).json(newAssignment);
-        console.log("created new assignment")
+        await connect_to_courses_test();
+        const number_of_same_assignments = assignments.filter(e => e.assignment === req.body.assignment && e.class_ID === req.body.class_ID).length;
+        if(number_of_same_assignments === 0){
+            const col = await db.collection("assignments");   
+            col.insertOne({"class_ID" : req.body.class_ID, "assignment": req.body.assignment, "card": 0, "translation" : req.body.translation,"audio": req.body.audio});
+            res.send("created first one of the new assignment")
+        }
+         else{
+        const col = await db.collection("assignments");
+        col.insertOne({"class_ID" : req.body.class_ID, "assignment": req.body.assignment, "card": number_of_same_assignments , "translation" : req.body.translation,"audio": req.body.audio});
+        const prompt = "created assingment no " +  (number_of_same_assignments) + ""
+        res.send(prompt)
+        }
     } catch (err) {
         res.status(400).json({ message: err.message });
         console.log("error created new assignment")
     }
 });
-
-router.delete('delete based on name and card', async (req, res) => {
-    try {
-        const nameNo = req.params.name;
-        const cardNo = req.params.card;
-        const delAssign = await assignment.findOne({$and:[{name: nameNo}, {card: cardNo}]});
-        if (delAssign === null) {
-            return res.status(404).json({ message: "Assignment not found" });
-        }
-        await assignment.deleteOne(delAssign);
-        res.json({ message: "Deleted Assignment" });
-    } catch (err) {
-        res.status(500).json({ message: `Internal server error: ${err.message}` });
-    }
-});
+ // delete all specific assignments in one class
+ router.delete('/name/:name', async (req, res) => {
+     try {
+        connect_to_courses_test();
+         const name_of_assignment = req.body.assignment;
+         const class_name = req.body.class_ID
+         const col = await db.collection("assignments");
+        col.deleteMany({$and:{"assignment" : name_of_assignment, "class_ID" : class_name}});
+         res.json({ message: "Deleted Assignment" });
+     } catch (err) {
+         res.status(500).json({ message: `Internal server error: ${err.message}` });
+     }
+ });
 
 module.exports = router; 
 
