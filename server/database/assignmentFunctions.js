@@ -72,9 +72,6 @@ async function updateAssignment (req,res){
             {$and:[{"assignment" : req.body.assignment, "class_ID" : classID}]},
             {$set:{"assignment":updatedAssignment}}
         )
-        // const newAssignment = (await getAllAssignments())
-        // .filter(e => e.assignment === updatedAssignment && e.class_ID === classID);
-        // console.log(newAssignment)
     }
     catch (err){
         res.status(500).json({message:`Internal server error: ${err.message}`})
