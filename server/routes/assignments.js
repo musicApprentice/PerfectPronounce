@@ -5,7 +5,7 @@ const router = express.Router();
 
 // print out all the assignments in a particular class. 
 router.get('/', async(req, res) =>{
-    const assignments = await getAllAssignments();
+    const assignments = await getAllAssignments(req.body.class_ID, req.body.assignment);
     res.send(assignments)
 });
 //
