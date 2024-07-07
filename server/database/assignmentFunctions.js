@@ -7,20 +7,27 @@ async function connectToCoursesDB(){
     await client.connect();
     db = client.db("CoursesTest");
 }
-async function getAllAssignments(class_ID, assignmentName) {
+
+//assignmentName is an optional parameter here, 
+//if no assignmentName is provided we query by just the classID
+//else we will query by the classID and the assignmentName
+async function findAssignmentsByClassID(class_ID, assignmentName) {
     try {
-        await connectToCoursesDB()
-        const assignment = await(db.collection("flashcards").find({$and:[{"class_ID" : class_ID}, {"assignment": assignmentName}]}).toArray());
-        return assignment;
+        await connectToCoursesDB();
+        const query = assignmentName 
+            ? { $and: [{"class_ID": class_ID}, {"assignment": assignmentName}] } 
+            : { "class_ID": class_ID };
+
+        const assignments = await db.collection("flashcards").find(query).toArray();
+        return assignments;
     } catch (err) {
-       console.log("Cannot access the database");
+        console.log("Cannot access the database");
     } 
 }
+
 async function addNewAssignment(req, res){
-    const assignments = await getAllAssignments();
     try {
-        const assignmentsInClass = assignments.filter(
-            e => e.assignment === req.body.assignment && e.class_ID === req.body.class_ID).length;
+        const assignmentsInClass = await findAssignmentsByClassID(req.body.class_ID).length;
         if(assignmentsInClass === 0){
             const col = await db.collection("flashcards");   
             col.insertOne({"class_ID" : req.body.class_ID,
@@ -48,9 +55,9 @@ async function deleteAssignment(req, res){
     try {
         await connectToCoursesDB();
         const nameOfAssignment = req.body.assignment;
-        const className = req.body.class_ID
+        const classID = req.body.class_ID
         const col = await db.collection("flashcards");
-        const arrOfAssign = await getAllAssignments(classID,nameOfAssignment)
+        const arrOfAssign = await findAssignmentsByClassID(classID,nameOfAssignment)
         if(arrOfAssign.length !== 0){
             await col.deleteMany({$and:[{"assignment" : nameOfAssignment, "class_ID" : classID}]});
             res.json({ message: "Deleted Assignment" });
@@ -78,4 +85,4 @@ async function updateAssignment (req,res){
     }
 
 }
-module.exports = {getAllAssignments,updateAssignment,deleteAssignment,addNewAssignment}
+module.exports = {findAssignmentsByClassID,updateAssignment,deleteAssignment,addNewAssignment}
