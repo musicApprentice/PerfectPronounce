@@ -7,10 +7,10 @@ async function connectToCoursesDB(){
     await client.connect();
     db = client.db("CoursesTest");
 }
-async function getAllAssignments() {
+async function getAllAssignments(class_ID, assignmentName) {
     try {
         await connectToCoursesDB()
-        const assignment = await(db.collection("flashcards").find().toArray());
+        const assignment = await(db.collection("flashcards").find({$and:[{"class_ID" : class_ID}, {"assignment": assignmentName}]}).toArray());
         return assignment;
     } catch (err) {
        console.log("Cannot access the database");
@@ -50,9 +50,9 @@ async function deleteAssignment(req, res){
         const nameOfAssignment = req.body.assignment;
         const className = req.body.class_ID
         const col = await db.collection("flashcards");
-        const arrOfAssign = await col.find({"assignment" : nameOfAssignment, "class_ID" : className}).toArray()
+        const arrOfAssign = await getAllAssignments(classID,nameOfAssignment)
         if(arrOfAssign.length !== 0){
-            await col.deleteMany({"assignment" : nameOfAssignment, "class_ID" : className});
+            await col.deleteMany({$and:[{"assignment" : nameOfAssignment, "class_ID" : classID}]});
             res.json({ message: "Deleted Assignment" });
         }
         else{
