@@ -1,11 +1,11 @@
-const {getAllAssignments, addNewAssignment, deleteAssignment,updateAssignment} = require('../database/assignmentFunctions');
+const {findAssignmentsByClassID, addNewAssignment, deleteAssignment,updateAssignment} = require('../database/assignmentFunctions');
 const express = require('express');
 const router = express.Router(); 
 
 
 // print out all the assignments in a particular class. 
 router.get('/', async(req, res) =>{
-    const assignments = await getAllAssignments(req.body.class_ID, req.body.assignment);
+    const assignments = await findAssignmentsByClassID(req.body.class_ID, req.body.assignment);
     res.send(assignments)
 });
 //
