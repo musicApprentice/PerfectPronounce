@@ -73,15 +73,18 @@ async function addNewAssignment(req, res){
         console.log("error created new assignment")
     }
 }
+// when you delete an assignment, the function will automatically delete the metrics of that assignment
 async function deleteAssignment(req, res){
     try {
         await connectToCoursesDB();
         const nameOfAssignment = req.body.assignment;
         const classID = req.body.class_ID
         const col = await db.collection("flashcards");
+        const col1 = await db.collection("metrics");
         const arrOfAssign = await findAssignmentsByClassID(classID,nameOfAssignment)
         if(arrOfAssign.length !== 0){
             await col.deleteMany({$and:[{"assignment" : nameOfAssignment, "class_ID" : classID}]});
+            await col1.deleteMany({$and:[{"assignment" : nameOfAssignment, "classId" : classID}]});
             res.json({ message: "Deleted Assignment" });
         }
         else{
@@ -91,14 +94,20 @@ async function deleteAssignment(req, res){
         res.status(500).json({ message: `Internal server error: ${err.message}` });
     }
 }
+//Likewise, when you update an assignment you have to update the metrics too.
 async function updateAssignment (req,res){
     try{
         await connectToCoursesDB();
         const col = await db.collection("flashcards")
+        const col1 = await db.collection("metrics");
         const classID = req.body.class_ID
         const updatedAssignment = req.body.update_assignment
         col.updateMany(
             {$and:[{"assignment" : req.body.assignment, "class_ID" : classID}]},
+            {$set:{"assignment":updatedAssignment}}
+        )
+        col1.updateMany(
+            {$and:[{"assignment" : req.body.assignment, "classId" : classID}]},
             {$set:{"assignment":updatedAssignment}}
         )
     }
