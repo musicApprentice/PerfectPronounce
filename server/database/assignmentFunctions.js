@@ -24,26 +24,48 @@ async function findAssignmentsByClassID(class_ID, assignmentName) {
         console.log("Cannot access the database");
     } 
 }
+async function createMetricsForStudent(studentEmail, assignmentName, classID, cardNo){
+    try{
+        await connectToCoursesDB();
+        const col = await db.collection("metrics")
+        const newMetric = new Metrics({
+            classID : classID,
+            assignment: assignmentName,
+            card: cardNo,
+            email: studentEmail,
+            timesPracticed: 0,
+            score: 0
+        })
+        await col.insertOne(newMetric)
+    }
+    catch(err){
+        console.log(err.message);
+    }
+}
 
 async function addNewAssignment(req, res){
     try {
-        const assignmentsInClass = await findAssignmentsByClassID(req.body.class_ID).length;
+        const assignmentsInClass = (await findAssignmentsByClassID(req.body.class_ID, req.body.assignment)).length;
         if(assignmentsInClass === 0){
-            const col = await db.collection("flashcards");   
-            col.insertOne({"class_ID" : req.body.class_ID,
-                        "assignment": req.body.assignment,
-                        "card": 1, "translation" : req.body.translation,
-                        "audio": req.body.audio});
+            const col = await db.collection("flashcards"); 
+            const newAssignment = {"class_ID" : req.body.class_ID,
+                "assignment": req.body.assignment,
+                "card": 1, "translation" : req.body.translation,
+                "audio": req.body.audio}
+            col.insertOne(newAssignment);
+            await createMetricsForStudent(req.body.email,newAssignment.assignment,req.body.class_ID, newAssignment.card)
             res.send("created first one of the new assignment")
         }
          else{
             const col = await db.collection("flashcards");
-            col.insertOne({"class_ID" : req.body.class_ID,
-                        "assignment": req.body.assignment,
-                        "card": assignmentsInClass + 1 ,
-                        "translation" : req.body.translation,
-                        "audio": req.body.audio});
+            const newAssignment = {"class_ID" : req.body.class_ID,
+                "assignment": req.body.assignment,
+                "card": assignmentsInClass + 1,
+                "translation" : req.body.translation,
+                "audio": req.body.audio}
+            col.insertOne(newAssignment);
             const prompt = `created assignment no. ${assignmentsInClass + 1} `
+            await createMetricsForStudent(req.body.email,newAssignment.assignment, req.body.class_ID, newAssignment.card)
             res.send(prompt)
         }
     } catch (err) {
