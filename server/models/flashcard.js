@@ -5,11 +5,11 @@ const flashCardSchema = new mongoose.Schema({
     // Then when we need all the flashcards from one particular assignment in one particular class we just
     // find({classId: cId, assignment: assignment});
     // class object id
-    classId: {type: mongoose.Schema.ObjectId, required: true},
+    class_ID: {type: mongoose.Schema.ObjectId, required: true},
     // name of assignment
     assignment: {type: String, required: true},
     // flashcard term/text to be practiced, should be unique within each assignment
-    card: {type: String, required: true},
+    card: {type: Number, required: true},
     translation:{type: String, require: true},
     audio:{type: String, require: true},
 })
