@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
 const connectionString = "mongodb+srv://mkandeshwarath:i0ZlJmFjH5yGRFmF@languagemaestro.uks1z9z.mongodb.net/?retryWrites=true&w=majority&appName=LanguageMaestro";
 const client = new MongoClient(connectionString);
-const Metrics = require('../models/metricsSchema')
+const Metrics = require('../models/metricsSchema');
+const FlashCard = require('../models/flashcard');
 var mongoose = require('mongoose');
 let db;
 
@@ -82,13 +83,13 @@ async function addNewAssignment(req, res){
         const assignmentsInClass = (await findAssignmentsByClassID(classID, req.body.assignment)).length;
         if(assignmentsInClass === 0){
             const col = await db.collection("flashcards"); 
-            const newAssignment = {
-                "class_ID" : classID,
-                "assignment": req.body.assignment,
-                "card": 1,
-                "translation" : req.body.translation,
-                "audio": req.body.audio
-            }
+            const newAssignment = new FlashCard({
+                class_ID : classID,
+                assignment: req.body.assignment,
+                card: 1,
+                translation : req.body.translation,
+                audio: req.body.audio
+            })
             await col.insertOne(newAssignment);
             const temp= await col.find({$and:[{"class_ID":classID},{"assignment": req.body.assignment},{"card": 1}]}).toArray()
             const newAssignment_ID = temp[0]._id;
@@ -98,12 +99,13 @@ async function addNewAssignment(req, res){
         }
          else{
             const col = await db.collection("flashcards");
-            const newAssignment = {
-                "class_ID" : classID,
-                "assignment": req.body.assignment,
-                "card": assignmentsInClass + 1,
-                "translation" : req.body.translation,
-                "audio": req.body.audio}
+            const newAssignment = new FlashCard({
+                class_ID : classID,
+                assignment: req.body.assignment,
+                card: assignmentsInClass + 1,
+                translation : req.body.translation,
+                audio: req.body.audio
+            })
             await col.insertOne(newAssignment);
             const temp= await col.find({$and:[{"class_ID":classID},{"assignment": req.body.assignment},{"card": assignmentsInClass + 1}]}).toArray()
             const newAssignment_ID = temp[0]._id;
