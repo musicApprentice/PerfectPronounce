@@ -17,7 +17,7 @@ async function connectToUsersDB(){
 async function findAllStudentInClass(classID){
     const col = await db.collection("classes");
     const temp = await col.find({"_id": classID}).toArray();
-    const students = temp[0].users;
+    const students = temp[0].students;
     return students;
 }
 // find email of student based on his/her id
