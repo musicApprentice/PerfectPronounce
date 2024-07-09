@@ -1,49 +1,25 @@
+const {create_new_class, delete_class, findAllTheClass, addFlashcard, addStudentToClass} = require ('../database/classFunctions')
 const express = require('express');
-const Class = require('../models/classSchema');
 const router = express.Router(); 
 
 router.route('/')
-    .get(async(req, res) => {
-        try {
-            const classes = await Class.find();
-            res.json(classes);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-            console.log("classes have no contents")
-    
-        }
+    .get(async(req, res) => { 
+            await findAllTheClass(req,res);
     })
     .post(async (req, res) => {
-        const newClass = new Class({
-            name: req.body.name,
-            language: req.body.language,
-            id: req.body.id,
-            assignments : req.body.assignments,
-            users : req.body.users
-        });
-        try {
-            const classSaved = await newClass.save();
-            res.status(201).json(classSaved);
-            console.log("created new Class")
-        } catch (err) {
-            res.status(400).json({ message: err.message });
-            console.log("error created new Class")
-        }
+       await create_new_class(req,res);
     })
 
 
 router.delete('/id/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const delClass = await Class.findOne({ id: id });
-        if (delClass === null) {
-            return res.status(404).json({ message: "Class not found" });
-        }
-        await Class.deleteOne({ id: id });
-        res.json({ message: "Deleted Class" });
-    } catch (err) {
-        res.status(500).json({ message: `Internal server error: ${err.message}` });
-    }
+    await delete_class(req,res);
 });
+// This route needs 2 parameters: flashcard_ID, and class_ID
+router.put('/update/:flashcard', async(req,res) =>{
+    await addFlashcard(req,res);
+})
+router.post('/add/:student', async(req,res) =>{
+    await addStudentToClass(req,res)
+} )
 
 module.exports = router; 
