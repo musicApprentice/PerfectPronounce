@@ -14,5 +14,5 @@ const flashCardSchema = new mongoose.Schema({
     audio:{type: String, require: true},
 })
 
-const FlashCard = mongoose.model("assignment", flashCardSchema);
+const FlashCard = mongoose.model("flashcard", flashCardSchema);
 module.exports = FlashCard;
