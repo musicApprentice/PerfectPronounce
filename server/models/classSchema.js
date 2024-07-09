@@ -15,7 +15,7 @@ const classSchema = new mongoose.Schema({
     // Alternatively, emails work too, instead of object Ids
     students: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
     teachers: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
-    admins: [{type: mongoose.Schema.ObjectId, ref: 'User'}]
+   
 
 })
 
