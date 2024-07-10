@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const metricsSchema = new mongoose.Schema({
+const gradesSchema = new mongoose.Schema({
     // Same as flashcards, have one collection with all grades from all classes and get grades per class as needed
     classId: {type: mongoose.Schema.ObjectId, required: true},
     assignment: {type: String, required: true},
@@ -10,5 +10,5 @@ const metricsSchema = new mongoose.Schema({
     score: {type: Number, required: true}
 })
 
-const Metrics = mongoose.model("assignment", metricsSchema);
-module.exports = Metrics;
+const Grades = mongoose.model("assignment", gradesSchema);
+module.exports = Grades;
