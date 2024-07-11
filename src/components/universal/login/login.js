@@ -12,7 +12,7 @@ const Login = () => {
     // Handle form submission logic here
     
     console.log('User logged in:', { email, password, role });
-
+    window.alert(`${email} logged in`)
     // Navigate to the appropriate route based on the user's role
     //TODO: Implement authentication with hashed password (Waiting on Jay's hashing update)
     if (role === 'Admin') {

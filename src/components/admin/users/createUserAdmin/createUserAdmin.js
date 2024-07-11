@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 // import './UserList.css'
-import SchoolDropdown from '../../universal/createAccount/schoolDropdown';
+import SchoolDropdown from '../../../universal/createAccount/schoolDropdown';
 const UserList = () => {
     //create states (getters and setters)
     const [users, setUsers] = useState([]);

@@ -66,10 +66,9 @@ const ViewUsers = () => {
     return (
         <div>
             <h3> User List</h3>
-            <label htmlFor="userSearch">Search for Users:</label>
+            <label htmlFor="firstName">Search for Users:</label>
             
             <input
-                id = "userSearch"
                 type="search"
                 placeholder="Search for users..."
                 value={searchTerm}
