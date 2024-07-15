@@ -13,9 +13,9 @@ const classSchema = new mongoose.Schema({
     // get them manually later on by finding all the users with the class in their course lists
 
     // Alternatively, emails work too, instead of object Ids
-    students: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
-    teachers: [{type: mongoose.Schema.ObjectId, ref: 'User'}],
-   
+   students: [{type: String, ref: 'User'}],
+    teachers: [{type: String, ref: 'User'}],
+    admins: [{type: String, ref: 'User'}]
 
 })
 
