@@ -10,5 +10,5 @@ const metricsSchema = new mongoose.Schema({
     score: {type: Number, required: true}
 })
 
-const Metrics = mongoose.model("assignment", metricsSchema);
+const Metrics = mongoose.model("Metrics", metricsSchema);
 module.exports = Metrics;
