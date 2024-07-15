@@ -5,12 +5,11 @@ const router = express.Router();
 
 // print out all the assignments in a particular class. 
 router.get('/', async(req, res) =>{
-    const assignments = await findAssignmentsByClassID(req.body.class_ID, req.body.assignment);
+    const assignments = await findAssignmentsByClassID(req.body.class_ID, req.body.assignmentName);
     res.send(assignments)
 });
-//
 
-// Add assignment to class
+// create assignment to class
 router.post('/', async (req, res) => {
     await addNewAssignment(req,res);
 });
