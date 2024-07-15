@@ -1,4 +1,4 @@
-const {create_new_class, delete_class, findAllTheClass, addFlashcard, addStudentToClass} = require ('../database/classFunctions')
+const {create_new_class, delete_class, findAllTheClass, addUserToClass} = require ('../database/classFunctions')
 const express = require('express');
 const router = express.Router(); 
 
@@ -15,11 +15,8 @@ router.delete('/id/:id', async (req, res) => {
     await delete_class(req,res);
 });
 // This route needs 2 parameters: flashcard_ID, and class_ID
-router.put('/update/:flashcard', async(req,res) =>{
-    await addFlashcard(req,res);
-})
-router.post('/add/:student', async(req,res) =>{
-    await addStudentToClass(req,res)
+router.post('/add/:user', async(req,res) =>{
+    await addUserToClass(req,res)
 } )
 
 module.exports = router; 
