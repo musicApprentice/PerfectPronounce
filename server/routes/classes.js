@@ -7,6 +7,7 @@ router.route('/')
     try {
   
       const classDoc = await Class.find()
+      //populate replaces the objectId's are in the students and teachers array of class with the actual objects
         .populate('students')
         .populate('teachers');
   
@@ -30,6 +31,7 @@ router.route('/')
             language: req.body.language,
             students : req.body.students,
             teachers : req.body.teachers
+            //students and teachers are an array of objectIds that reference actually users
 
         });
         try {
