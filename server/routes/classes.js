@@ -3,23 +3,34 @@ const Class = require('../models/classSchema');
 const router = express.Router(); 
 
 router.route('/')
-    .get(async(req, res) => {
-        try {
-            const classes = await Class.find();
-            res.json(classes);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-            console.log("classes have no contents")
-    
-        }
-    })
+    .get(async (req, res) => {
+    try {
+  
+      const classDoc = await Class.find()
+        .populate('students')
+        .populate('teachers');
+  
+      if (!classDoc) {
+        return res.status(404).json({ message: 'Class not found' });
+      }
+  
+      res.json(classDoc);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+      console.log("Error retrieving class", err);
+    }
+  })
+  
     .post(async (req, res) => {
+        console.log(req.body)
         const newClass = new Class({
-            name: req.body.name,
+            courseNumber: req.body.courseNumber,
+            className: req.body.className,
+            school: req.body.school,
             language: req.body.language,
-            id: req.body.id,
-            assignments : req.body.assignments,
-            users : req.body.users
+            students : req.body.students,
+            teachers : req.body.teachers
+
         });
         try {
             const classSaved = await newClass.save();
@@ -27,7 +38,7 @@ router.route('/')
             console.log("created new Class")
         } catch (err) {
             res.status(400).json({ message: err.message });
-            console.log("error created new Class")
+            console.log("error creating new Class", err)
         }
     })
 
@@ -35,12 +46,15 @@ router.route('/')
 router.delete('/id/:id', async (req, res) => {
     try {
         const id = req.params.id;
-        const delClass = await Class.findOne({ id: id });
-        if (delClass === null) {
+        console.log(id)
+        const delClass = await Class.findOne({ _id: id });
+        console.log(delClass)
+        if (!delClass) {
             return res.status(404).json({ message: "Class not found" });
         }
-        await Class.deleteOne({ id: id });
+        await Class.deleteOne({ _id: id });
         res.json({ message: "Deleted Class" });
+        console.log("deleted course")
     } catch (err) {
         res.status(500).json({ message: `Internal server error: ${err.message}` });
     }

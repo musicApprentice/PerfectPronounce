@@ -16,8 +16,12 @@ const AdminLayout = () => {
               <Link to="classes">Classes</Link>
             </h5>
             <h5>
+              <Link to="lessons">Lessons</Link>
+            </h5>
+            <h5>
               <Link to="assignments">Assignments</Link>
             </h5>
+           
         <Outlet /> {/* This is where the nested route components will be rendered */}
       </div>
     );

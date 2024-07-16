@@ -29,9 +29,25 @@ const ViewClasses = () => {
     }
 
     const filteredClasses = classes.filter(course => 
-        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        course.className.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.language.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    const handleDelete = (deleteCourse) => {
+        const confirmDelete = window.confirm(`You are about to permanently delete ${deleteCourse.className}`)
+        console.log(deleteCourse)
+        if (confirmDelete) {
+            fetch(`http://localhost:3000/api/classes/id/${deleteCourse._id}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(setClasses(classes.filter((course) => course!== deleteCourse)))
+            .catch(error => console.error(error,"Error deleting class"))
+        }
+    }
     return (
         <div>
         <h3> Class Database </h3>
@@ -47,10 +63,30 @@ const ViewClasses = () => {
             <h3></h3>
 
             <div>
-                {filteredClasses.map((course, index) => (
-                    <div key = {index}>
-                        {course.name}-{course.language}
-                    </div>
+                {classes.map((course, index) => (
+                    <li key = {index}>
+                        {course.className}- {course.language} - {course.courseNumber}
+
+                        <h4> 
+                            
+                            {course.students && course.students.map((student, index) =>(
+                                <h6 key = {index}>
+                                {student.firstName} {student.lastName} {student.email}
+                                </h6>
+                            )
+                            )}
+                        </h4>
+                        <h4>                             
+                            {course.teachers && course.teachers.map((teacher, index) =>(
+                                <h6 key = {index}>
+                                {teacher.firstName} {teacher.lastName} {teacher.email}
+                                </h6>
+            
+                            )
+                            )}
+                        </h4>
+                        <button onClick={()=>handleDelete(course)}> Delete </button>
+                    </li>
                 ))}
             </div>
         </div>
