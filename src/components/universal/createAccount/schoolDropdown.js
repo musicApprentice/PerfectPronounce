@@ -123,7 +123,7 @@ const SchoolDropdown = ({selectedSchool, setSelectedSchool}) => {
 
   return (
     <div>
-      <label htmlFor="states">Select a State</label>
+      <label htmlFor="states">Search for School by State</label>
       <select id="states" value={selectedState} onChange={handleStateChange}>
         {/* we attach an event handler, handleStateChange */}
         <option value="" disabled>Select a state</option>

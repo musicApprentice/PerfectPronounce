@@ -9,7 +9,7 @@ const CreateUser = () => {
   const [email, setEmail] = useState('');
   const [selectedSchool, setSelectedSchool] = useState('');
   const [role, setRole] = useState('');
-
+  const [password, setPassword] = useState('')
 
 
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ const CreateUser = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const newUser = { firstName, lastName, email, role, selectedSchool };
+    let school = selectedSchool
+    const newUser = { firstName, lastName, email, role, school };
     //on submit button we create a new user object
 
 
@@ -32,6 +32,7 @@ const CreateUser = () => {
     })
       .then(response => {
         if (response.ok) {
+          window.alert(`User created ${newUser}`)
           console.log('User created:', newUser);
           // Navigate to the appropriate route based on the user's role
           if (role === 'Admin') {
@@ -60,7 +61,6 @@ const CreateUser = () => {
           <label htmlFor="roles">Select a Role</label>
           <select id="roles" value={role} onChange={handleRoleChange} required>
             <option value="" disabled>Select a role</option>
-            <option value="Admin">Admin</option>
             <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
           </select>
@@ -86,11 +86,24 @@ const CreateUser = () => {
           />
         </div>
         <div>
+          <label htmlFor = "email"> Email: </label>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+        <label htmlFor = "email"> Password: </label>
+
+          <input
+          
+            type="password"
+            id="email"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
         </div>

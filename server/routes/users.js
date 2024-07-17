@@ -20,8 +20,9 @@ router.post('/', async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
-        school: req.body.selectedSchool,
-        role: req.body.role
+        school: req.body.school,
+        role: req.body.role,
+        password: req.body.password
     });
 
     try {
@@ -42,8 +43,11 @@ router.delete('/email/:email', async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
         await User.deleteOne({ email: email });
+        console.log("deleted user", email)
         res.json({ message: "Deleted User" });
     } catch (err) {
+        console.log("error deleting user")
+
         res.status(500).json({ message: `Internal server error: ${err.message}` });
     }
 });

@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
  });
 
  // update assignment in a particular class. This function requires 3 parameters: class_ID, name of assignment, and new assignment
-    router.put('/update/:update_assignment', async (req,res) =>{
-        await updateAssignment(req,res);
-    })
+router.put('/update/:update_assignment', async (req,res) =>{
+    await updateAssignment(req,res);
+})
 module.exports = router; 
