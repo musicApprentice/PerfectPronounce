@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-
 const ViewClasses = () => {
     //define getters and setters
     const [classes, setClasses] = useState([]);

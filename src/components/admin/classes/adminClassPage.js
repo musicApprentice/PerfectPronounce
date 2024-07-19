@@ -1,5 +1,5 @@
 import React from 'react'
-import ViewClasses from './viewClassesAdmin'
+import ViewClasses from './viewClasses/viewClassesAdmin'
 import CreateClass from './createClassAdmin';
 
 const AdminClassPage = () => {
