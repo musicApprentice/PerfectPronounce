@@ -1,16 +1,15 @@
-const {getAllAssignments, addNewAssignment, deleteAssignment,updateAssignment} = require('../database/assignmentFunctions');
+onst {findAssignmentsByClassID, addNewAssignment, deleteAssignment,updateAssignment} = require('../database/flashcardFunctions');
 const express = require('express');
 const router = express.Router(); 
 
 
 // print out all the assignments in a particular class. 
 router.get('/', async(req, res) =>{
-    const assignments = await getAllAssignments(req.body.class_ID, req.body.assignment);
+    const assignments = await findAssignmentsByClassID(req.body.class_ID, req.body.assignmentName);
     res.send(assignments)
 });
-//
 
-// Add assignment to class
+// create assignment to class
 router.post('/', async (req, res) => {
     await addNewAssignment(req,res);
 });
@@ -20,7 +19,7 @@ router.post('/', async (req, res) => {
  });
 
  // update assignment in a particular class. This function requires 3 parameters: class_ID, name of assignment, and new assignment
-router.put('/update/:update_assignment', async (req,res) =>{
-    await updateAssignment(req,res);
-})
+    router.put('/update/:update_assignment', async (req,res) =>{
+        await updateAssignment(req,res);
+    })
 module.exports = router; 
