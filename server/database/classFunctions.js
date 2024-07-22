@@ -1,21 +1,10 @@
-const {createMetricsForStudent, findAssignmentsByClassID} = require('../database/assignmentFunctions')
-const Class = require('../models/classSchema');
-const { MongoClient} = require('mongodb');
-const connectionString = "mongodb+srv://mkandeshwarath:i0ZlJmFjH5yGRFmF@languagemaestro.uks1z9z.mongodb.net/?retryWrites=true&w=majority&appName=LanguageMaestro";
-const client = new MongoClient(connectionString);
-var mongoose = require('mongoose');
-let db;
+const {createMetricsForStudent, findAssignmentsByClassID} = require('./flashcardFunctions')
+const Class = require('../models/classSchema')
+const User = require('../models/userSchema')
+const FlashCard = require('../models/flashcardSchema')
+var mongoose = require('mongoose')
 
-async function accessDB (req,res) {
-    try{
-    await client.connect();
-    db = client.db("test")
-    }
-    catch(err){
-        res.status(500).json({ message: err.message });
-        console.log("classes have no contents")
-    }
-}
+
 
 async function findAllTheClass(req,res){
     const classes = await Class.find() 
@@ -25,12 +14,10 @@ async function create_new_class(req,res){
     const newClass = new Class({
         className: req.body.className,
         language: req.body.language,
-        school : req.body.school,
         courseNumber : req.body.courseNumber,
-        assignments : req.body.assignments,
-        students : req.body.students,
-        teachers : req.body.teachers,
-        admins: req.body.admins
+        school : req.body.school,
+        students : req.body.students? req.body.students : [],
+        teachers : req.body.teachers? req.body.teachers: [],
     });
     try {
         await newClass.save()
@@ -45,48 +32,43 @@ async function create_new_class(req,res){
 async function delete_class(req,res){
     try {
         const id = new mongoose.Types.ObjectId(req.body._id);
-        await accessDB(req,res);
-        const col = db.collection("classes")
-        const delClass = await col.findOne({ "_id": id});
-        if (delClass === null) {
-            return res.status(404).json({ message: "Class not found" });
-        }
-        await col.deleteOne({ _id: id })
-
-        res.json({ message: "Deleted Class" });
+        await Class.deleteOne({"_id":id})
+        const studentsInThatClass = await (await User.find()).filter(e => e.courseList.some(e1 => e1.equals(id)))
+        studentsInThatClass.forEach(async e => {
+            const start = e.courseList.indexOf(id)
+            e.courseList.splice(start,1)
+            await User.updateOne({"email": e.email},{$set:{"courseList": e.courseList}})
+        })
+        await FlashCard.deleteMany({"class_ID":id})
+        res.json("Deleted Class")
     } catch (err) {
         res.status(500).json({ message: `Internal server error: ${err.message}` });
     }
 }
 
 async function addClassToUserCourseList(userEmail, class_ID){
-    await accessDB();
-    const col = await db.collection("users")
-    const temp = await col.find({"email":userEmail}).toArray();
+    const temp = await User.find({"email":userEmail});
     const courseList = temp[0].courseList;
     if(courseList.some(e => e.equals(class_ID))){
         console.log("the class already in the courseList");
     }
     else{
         courseList.push(class_ID)
-        await col.updateOne({"email": userEmail},{$set:{"courseList": courseList}})
+        await User.updateOne({"email": userEmail},{$set:{"courseList": courseList}})
     }
 
 }
 async function findRole(userEmail){
-    await accessDB();
-    const col = await db.collection("users");
-    const emails = await col.find({"email": userEmail}).toArray();
+    const emails = await User.find({"email": userEmail});
     return emails[0].role;
 }
 //add one student to a class, and vice versa
 async function addUserToClass (req,res){
-    await accessDB();
-    const col = await db.collection("classes");
-    const userEmail = req.body.userEmail;
-    const classID = new mongoose.Types.ObjectId(req.body.classID);
+    const userEmail = req.body.email;
+    const user_id = (await User.find({"email" : userEmail}))[0]._id
+    const classID = new mongoose.Types.ObjectId(req.body._id);
     const role = (await findRole(userEmail)).toLowerCase() + "s";
-    const tempClass = await (col.find({"_id" : classID}).toArray())
+    const tempClass = await Class.find({"_id" : classID})
     var arrOfUsers;
     switch(role){
         case "students" :{
@@ -103,17 +85,19 @@ async function addUserToClass (req,res){
         }
         default:
     }
-    if(arrOfUsers.some(e=> e.localeCompare(userEmail) === 0)){
+    if(arrOfUsers.some(e=> e.equals(user_id))){
         res.json(`That ${role.substring(0, role.length-1)}  already in the class!`)
     }
     else{
-        arrOfUsers.push(userEmail);
-        await col.updateOne({"_id": classID}, {$set:{[`${role}`]: arrOfUsers}})
+        arrOfUsers.push(user_id);
+        await Class.updateOne({"_id": classID}, {$set:{[`${role}`]: arrOfUsers}})
         await addClassToUserCourseList(userEmail,classID);
         const allAssignment = await findAssignmentsByClassID(classID);
+        if(role === "students"){
         allAssignment.forEach(async (e) =>{
             await createMetricsForStudent(e.assignment,classID, e.card, userEmail)
         })
+    }
         res.json("Done")
     }
 }
