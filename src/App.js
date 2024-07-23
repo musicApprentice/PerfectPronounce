@@ -7,9 +7,9 @@ import StudentLayout from "./components/student/studentLayout";
 import TeacherLayout from "./components/teacher/teacherLayout";
 import AdminUserPage from "./components/admin/users/adminUserPage";
 import AdminClassPage from "./components/admin/classes/adminClassPage";
-
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import AdminAssignmentPage from "./components/admin/lessons/adminAssignmentPage";
+import AdminLessonPage from "./components/admin/lessons/lessonsPage";
+import AdminAssignmentPage from "./components/admin/assignments/assignmentPage";
 
 function App() {
   return (
@@ -36,7 +36,9 @@ function App() {
                 <Route path="/admin" element={<AdminLayout />}>
                     <Route path="users" element={<AdminUserPage />} />
                     <Route path="classes" element={<AdminClassPage />}/>
-                    <Route path="lessons" element={<AdminAssignmentPage />} />
+                    <Route path="lessons" element={<AdminLessonPage />} />
+                    <Route path="assignments" element={<AdminAssignmentPage />} />
+
                 </Route>
                 <Route path="/student" element={<StudentLayout />}>
                  

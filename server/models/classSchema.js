@@ -7,6 +7,8 @@ const classSchema = new mongoose.Schema({
     language: { type: String, required: true },
     students: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
     teachers: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+    assignments: [{ type: mongoose.Schema.ObjectId, ref: 'Assignment' }],
+
   });
 
 const Class = mongoose.model("Class", classSchema);
