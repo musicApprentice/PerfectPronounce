@@ -57,7 +57,7 @@ async function verifyLogin(req,res){
     await User.exists({"email":email}).exec().then(async e =>{
          if(e){
              const user = (await User.find({"_id":e}))[0]
-            await bcrypt.compare(password,user.password) ? confirm = true: confirm = false 
+             confirm = await bcrypt.compare(password,user.password) ? true:false 
          }
      })
      return confirm
