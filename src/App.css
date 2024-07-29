@@ -1,7 +1,16 @@
+@font-face {
+  font-family: "Sail";
+  src: url('/src/fonts/Sail/Sail-Regular.ttf');
+}
+
+@font-face {
+  font-family: "Salsa";
+  src: url('/src/fonts/Salsa/Salsa-Regular.ttf');
+}
+
 body, html {
   height: 100%;
   margin: 0;
-  font-family: 'Arial', sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -90,23 +99,28 @@ body, html {
 }
 
 .content {
-  width: 100%;
+  width: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px; /* Add some margin to separate from the header */
+  margin-top: 100px; /* Add some margin to separate from the header */
 }
 
 .content h2 {
   font-size: 2em;
-  margin-bottom: 20px;
-  font-family: 'Brush Script MT', cursive;
+  margin-left: 20px;
+  font-family: Sail;
+  font-weight: 100;
+  color: rgb(255, 255, 255);
 }
 
 .get-started {
+  width: 200px;
   padding: 10px 20px;
   font-size: 1.2em;
+  font-family: Salsa;
+  font-weight: 100;
   background-color: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;

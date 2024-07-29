@@ -29,6 +29,20 @@ function AuthButton() {
   );
 }
 
+function GetStarted() {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate('/createAccount');
+  };
+
+  return (
+    <>
+      <button class="get-started" onClick={handleGetStarted}>Get Started</button>
+    </>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -42,7 +56,7 @@ function App() {
         </div>
         <div class="content">
             <h2>Experience a new era of foreign language learning</h2>
-            <button class="get-started" onclick="getStarted()">Get Started</button>
+            <GetStarted/>
         </div>
 
         <Routes>
