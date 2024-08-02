@@ -1,9 +1,10 @@
 const express = require('express');
 const Class = require('../models/classSchema');
+const User = require('../models/userSchema')
 const router = express.Router(); 
 
 router.route('/')
-    .get(async (req, res) => {
+  .get(async (req, res) => {
     try {
   
       const classDoc = await Class.find()
@@ -22,6 +23,7 @@ router.route('/')
     }
   })
   
+
     .post(async (req, res) => {
         console.log(req.body)
         const newClass = new Class({
@@ -34,8 +36,21 @@ router.route('/')
             //students and teachers are an array of objectIds that reference actually users
 
         });
+        //For each student in the class and teacher in the class, I want to add this class ID to their classList
         try {
             const classSaved = await newClass.save();
+            const classId = classSaved._id;
+
+            await User.updateMany(
+              {_id: {$in: req.body.students}}, //find where the _id matches any of the documents in students
+              {$addToSet: {courseList: classId}} //adds to the set (no duplicates) and updates the courseList field
+            )
+
+            await User.updateMany(
+              {_id: {$in: req.body.teachers}},
+              {$addToSet: {courseList:classId}}
+            )
+
             res.status(201).json(classSaved);
             console.log("created new Class")
         } catch (err) {
@@ -51,6 +66,17 @@ router.delete('/id/:id', async (req, res) => {
         console.log(id)
         const delClass = await Class.findOne({ _id: id });
         console.log(delClass)
+
+        await User.updateMany(
+          {_id: {$in: delClass.students}}, //find where the _id matches any of the documents in students
+          {$pull: {courseList: id}} //removes and updates the courseList field for each student
+        )
+
+        await User.updateMany(
+          {_id: {$in: delClass.teachers }},
+          {$pull: {courseList:id}}
+        )
+
         if (!delClass) {
             return res.status(404).json({ message: "Class not found" });
         }

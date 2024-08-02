@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = ({onLogin}) => {
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
   const [password, setPassword] = useState('')
@@ -22,6 +22,8 @@ const Login = () => {
     } else if (role === 'Teacher') {
       navigate('/teacher');
     }
+
+    onLogin()
   };
 
   const handleRoleChange = (event) => {

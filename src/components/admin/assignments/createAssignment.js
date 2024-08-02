@@ -7,10 +7,27 @@ const CreateAssignment = () => {
 
     const SendNewAssignment = (e) => {
         e.preventDefault();
-        !lesson? window.alert("Please select a lesson"):
-        window.alert(`Made new assignment: attempts: ${attempts} scoring type: ${scoringType} goal average: ${goalAverage} lesson name:${lesson.name}`)
-    }
+        // !lesson? 
+        console.log(lesson)
+        let vocab = lesson.name;
+        const newAssignment = {attempts, scoringType, goalAverage, lesson};
 
+        console.log(newAssignment)
+
+
+        fetch("http://localhost:3000/api/assignments", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(newAssignment)
+        })
+        .then(response => response.json)
+        .then(data => {
+            window.alert("Created new assignment")
+        })
+        .catch(error => console.error(error))
+    }
     const handleAttemptNumChange = (e) => {
         SetAttempts(e.target.value)
     }
@@ -88,6 +105,7 @@ const CreateAssignment = () => {
     return (
         <div> 
             <h3>Create New Assignment</h3>
+            
             <div value = {lesson}>
                 <h4 value = {lesson} disabled>Select a lesson</h4>
                 {fetchedLessons.map((lesson, index) =>

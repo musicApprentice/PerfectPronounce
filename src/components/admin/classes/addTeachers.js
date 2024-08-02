@@ -46,7 +46,8 @@ function AddTeachers({selectedTeachers = [], setSelectedTeachers}) {
     };
 
     const handleTeacherClick = (teacher) => {
-            setSelectedTeachers([...selectedTeachers, teacher]);
+        
+        setSelectedTeachers([...selectedTeachers, teacher]);
         console.log(selectedTeachers)
         setSearchTerm('');
         setDropdownVisible(false);

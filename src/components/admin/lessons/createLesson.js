@@ -15,15 +15,6 @@ import React, {useState, useEffect} from "react"
 
 const CreateLesson = () => {
 
-    const createLesson = () => {
-        if (lesson.some((card)=> card.term ===null|| card.translation === null)) {
-            window.alert("Please fill out all fields")
-            return
-        }
-        window.alert("Lesson created")
-
-        console.log("Created a lesson")
-    }
 
     //replace with a fetch
     const testLesson = 
@@ -52,7 +43,39 @@ const CreateLesson = () => {
 
    
 
-    const [lesson, setLesson] = useState(testLesson)
+    const [lesson, setLesson] = useState([{term: "", translation: ""}])
+    const [lessonName, setLessonName] = useState('')
+    const hardCodedID = "66a0fee8e13160a3a275da33"
+    const [course, setCourse] = useState(hardCodedID)
+
+    
+    const createLesson = (e) => {
+        e.preventDefault();
+        if (lesson.some((card)=> card.term ===null|| card.translation === null)) {
+            // window.alert("Please fill out all fields")
+            return
+        }
+
+
+        const flashcards = lesson;
+        window.alert(`${course}`)
+        console.log("Created a lesson", course, lessonName, flashcards)
+
+        const newLesson = {course, lessonName, flashcards}
+        fetch("http://localhost:3000/api/lessons", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newLesson)
+        })
+        .then(response => response.json)
+        .then(data => {
+            // window.alert("Lesson created")
+        })
+        .catch(error => console.error(error))
+    }
+
 
     const handleTermChange = (changeIndex, e) => {
         const newLesson = [...lesson];
@@ -62,8 +85,9 @@ const CreateLesson = () => {
 
     const handleTranslationChange = (changeIndex, e) => {
         const newLesson = [...lesson];
-        newLesson[changeIndex].translation = e.target.translation;
+        newLesson[changeIndex].translation = e.target.value;
         setLesson(newLesson)
+        console.log(newLesson)
     }
 
     const addCard = () => {
@@ -80,33 +104,58 @@ const CreateLesson = () => {
         setLesson(newLesson)
         }
     }
+
+    const handleLessonNameChange = (e) => {
+        setLessonName(e.target.value);
+    }
     return (
         <div> 
             <h3> Create and Edit Lesson </h3>
-            <div>
-                {lesson.map((card, index)=>
-                <div key = {index}>
-                    <number> {index}</number>
-                    <input
-                        placeholder="term"
+            <form onSubmit={createLesson}>
+                Lesson Name
+                <input 
+                    type = "text"
+                    placeholder = "Enter Lesson Name"
+                    value = {lessonName}
+                    onChange = {(e) => setLessonName(e.target.value)}
+                />
+                Class Name
+                <select>
+                    <option value ="" disabled> Select a class</option>
+                    <option 
                         type = "text"
-                        onChange = {(event) => handleTermChange(index, event)}
-                        value = {card.term}
-                    />
-                
-                    <input
-                        placeholder="translation"
-                        type = "text"
-                        onChange = {(event) => handleTranslationChange(index, event)}
-                        value = {card.translation}
+                        value = {course}
+                        // hard code this id here 
+                        onChange = {(e) => setCourse(e.target.value)}
+                    >English 100: Test Class</option> 
                     
-                    />
-                    <button onClick = {()=> deleteCard(index)}> Delete </button>
+                 </select>
+                
+                <div> Flashcards
+                    {lesson.map((card, index)=>
+                    <div key = {index}>
+                        <number> {index+1}</number>
+                        <input
+                            placeholder="term"
+                            type = "text"
+                            onChange = {(event) => handleTermChange(index, event)}
+                            value = {card.term}
+                        />
+                    
+                        <input
+                            placeholder="translation"
+                            type = "text"
+                            onChange = {(event) => handleTranslationChange(index, event)}
+                            value = {card.translation}
+                        
+                        />
+                        <button onClick = {()=> deleteCard(index)}> Delete </button>
+                    </div>
+                    )}
+                    <button onClick = {addCard}>Add a card </button>
                 </div>
-                )}
-                <button onClick = {addCard}>Add a card </button>
-            </div>
-            <button onClick = {createLesson} > Create a lesson </button>
+                <button> Create a lesson </button>
+            </form>
         </div>
     )
 }
