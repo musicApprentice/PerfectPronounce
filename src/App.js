@@ -46,14 +46,17 @@ function GetStarted() {
 function App() {
   return (
     <Router>
-      <div class="background-container"></div>
-      <div class="overlay">
-        <div class="header">
+      <div className="background-container"></div>
+      <div className="overlay">
+        <div className="header">
+          <a href = "/">
             <h1><img src = {logoSrc} className="logo" alt="logo"></img></h1>
-            <div className="auth-buttons">
-              <AuthButton />
-            </div>
+          </a>
+          <div className="auth-buttons">
+            <AuthButton />
+          </div>
         </div>
+        
         <div class="content">
             <h2>Experience a new era of foreign language learning</h2>
             <GetStarted/>
