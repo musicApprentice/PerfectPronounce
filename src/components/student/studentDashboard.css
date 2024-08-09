@@ -1,0 +1,24 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+
+.sidebar-container {
+    transition: margin-left 0.3s ease;
+    margin-left: 200px; /* Default width of the sidebar */
+    margin-top: 60px; /* Adjust for the height of the navbar */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar.collapsed ~ .sidebar-container {
+    margin-left: 50px; /* Adjust for collapsed sidebar width */
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+}

@@ -4,7 +4,7 @@ const cardGrades = new mongoose.Schema({
     assignment: {type: mongoose.Schema.ObjectId, ref: "Assignment"},
     timesPracticed: {type: Number, required: true},
     average: {type: Number, required: true},
-    completed: {type: Boolean},
+    completed: {type: Boolean, default: false},
 
     student: {type: mongoose.Schema.ObjectId, ref: 'User'},
     atomicScores: {type: mongoose.Schema.ObjectId, ref: "AttemptGrade"},

@@ -3,13 +3,13 @@ const CreateAssignment = () => {
     const [attempts, SetAttempts] = useState();
     const [scoringType, setScoringType] = useState("");
     const [goalAverage, setGoalAverage] = useState();
+    const [lessons, setLessons] = useState();
     const [lesson, setLesson] = useState();
+
 
     const SendNewAssignment = (e) => {
         e.preventDefault();
-        // !lesson? 
         console.log(lesson)
-        let vocab = lesson.name;
         const newAssignment = {attempts, scoringType, goalAverage, lesson};
 
         console.log(newAssignment)
@@ -28,6 +28,8 @@ const CreateAssignment = () => {
         })
         .catch(error => console.error(error))
     }
+
+
     const handleAttemptNumChange = (e) => {
         SetAttempts(e.target.value)
     }
@@ -91,8 +93,21 @@ const CreateAssignment = () => {
         {"term": "金門大橋", "translation": "Golden Gate Bridge"},
         {"term": "撒哈拉沙漠", "translation": "Sahara Desert"}
     ]}
+    const fetchLessons = () => {
+        fetch("http://localhost:3000/api/lessons", {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json"
+            }
+        
+        }) 
+        .then(response =>response.json())
+        .then(data => setLessons(data))
+        .catch(error => console.error(error, "error fetching lessons"))
+    }
 
-    const fetchedLessons = [lesson1, lesson2]
+     useEffect(()=> fetchLessons(), [])
+
 
     const handleLessonChange = (selectedLesson) => {
         console.log("lesson got changed", selectedLesson)
@@ -108,10 +123,10 @@ const CreateAssignment = () => {
             
             <div value = {lesson}>
                 <h4 value = {lesson} disabled>Select a lesson</h4>
-                {fetchedLessons.map((lesson, index) =>
+                {lessons && lessons.map((lesson, index) =>
                     <li key = {index} >
                         <span onClick = {()=>handleLessonChange(lesson)}>
-                             Lesson {lesson.lessonNumber} {lesson.name} 
+                             Lesson  {lesson.name} 
                         </span>
                         <button onClick={() => goToLesson(lesson)}> Go to Lesson</button>
                     </li>
@@ -123,8 +138,8 @@ const CreateAssignment = () => {
                 <h5>Selected Lesson</h5>
                 <p>Lesson {lesson.lessonNumber}: {lesson.name} Preview</p>
                 <ul>
-                    {lesson.vocabList.filter((item, index)=> index < 5).map((item, index) => (
-                        <li key={index}>{item.term} - {item.translation}</li>
+                    {lesson.flashcards.filter((item, index)=> index < 5).map((item, index) => (
+                        <li key={index}>  {item.term} - {item.translation}</li>
                     ))}
                 </ul>
             </div>
@@ -147,7 +162,7 @@ const CreateAssignment = () => {
                     <input 
                         id = "average"
                         type = "number"
-                        placeholder="Required average"
+                        placeholder="Average"
                         step = "3"
                         min = "1"
                         max = "100"

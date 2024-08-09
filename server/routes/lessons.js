@@ -13,7 +13,7 @@ const router = express.Router();
  */
 async function insertFlashcards(flashcardData) {
     const flashcards = await FlashCard.insertMany(flashcardData);
-    return flashcards.map((card)=> card.id);
+    return flashcards.map((card)=> card._id);
 }
 
 router.route('/')
@@ -51,12 +51,12 @@ router.route('/')
         )
 
         res.status(201);
+        console.log("successful creation of lesson")
 
     })
     .get(async (req, res) => {
         try {
-            const lessonDoc = await Lesson.find()
-            .populate('flashcards');
+            const lessonDoc = await Lesson.find().populate("flashcards")
 
             if (!lessonDoc) {
                 return res.status(404).json({message: "Lesson not found"})
@@ -71,14 +71,19 @@ router.route('/')
     router.route('/id/:id')
     .delete(async (req, res) => {
         //TODO:Delete from user lists too
+        //TODO:Delete the associated assignments too 
+        
         try {
             const id = req.params.id;
+            console.log(id)
             
-            const delClass = await Class.findOne({_id: id})
+            const delClass = await Lesson.findOne({_id: id})
             if (!delClass) {
                 return res.status(404).json({message: "Lesson not found"})
             }
-            await Class.deleteOne({_id:id})
+            await Lesson.deleteOne({_id:id})
+            console.log(req.params.id, "deleted")
+
         }
         catch (err) {
             res.status(500).json({message: err.message});

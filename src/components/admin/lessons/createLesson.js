@@ -14,45 +14,32 @@ import React, {useState, useEffect} from "react"
 
 
 const CreateLesson = () => {
-
-
-    //replace with a fetch
-    const testLesson = 
-    [
-        {"term": "狗", "translation": "dog"},
-        {"term": "貓", "translation": "cat"},
-        {"term": "鳥", "translation": "bird"},
-        {"term": "魚", "translation": "fish"},
-        {"term": "馬", "translation": "horse"},
-        {"term": "牛", "translation": "cow"},
-        {"term": "羊", "translation": "sheep"},
-        {"term": "豬", "translation": "pig"},
-        {"term": "兔", "translation": "rabbit"},
-        {"term": "熊", "translation": "bear"},
-        {"term": "老虎", "translation": "tiger"},
-        {"term": "獅子", "translation": "lion"},
-        {"term": "猴子", "translation": "monkey"},
-        {"term": "大象", "translation": "elephant"},
-        {"term": "蛇", "translation": "snake"},
-        {"term": "青蛙", "translation": "frog"},
-        {"term": "鱷魚", "translation": "crocodile"},
-        {"term": "烏龜", "translation": "turtle"},
-        {"term": "老鼠", "translation": "mouse"},
-        {"term": "蝴蝶", "translation": "butterfly"}
-    ]
-
-   
-
     const [lesson, setLesson] = useState([{term: "", translation: ""}])
     const [lessonName, setLessonName] = useState('')
-    const hardCodedID = "66a0fee8e13160a3a275da33"
-    const [course, setCourse] = useState(hardCodedID)
+    const [course, setCourse] = useState('')
+    const [classes, setClasses] = useState([])
+
+    const fetchClasses = () => {
+        fetch("http://localhost:3000/api/classes", {
+            method: "GET",
+            headers: {
+                'Content-Type': "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => setClasses(data))
+        .catch(error => console.error(error, "Error fetching classes"))
+        
+    }
+
+    useEffect(()=>fetchClasses, []) 
+
 
     
     const createLesson = (e) => {
         e.preventDefault();
         if (lesson.some((card)=> card.term ===null|| card.translation === null)) {
-            // window.alert("Please fill out all fields")
+            window.alert("Please fill out all fields")
             return
         }
 
@@ -71,7 +58,10 @@ const CreateLesson = () => {
         })
         .then(response => response.json)
         .then(data => {
-            // window.alert("Lesson created")
+            window.alert("Lesson created")
+            setLesson([{term: "", translation: ""}])
+            setLessonName("")
+            setCourse("")
         })
         .catch(error => console.error(error))
     }
@@ -120,14 +110,11 @@ const CreateLesson = () => {
                     onChange = {(e) => setLessonName(e.target.value)}
                 />
                 Class Name
-                <select>
+                <select value = {course} onChange = {(e) => setCourse(e.target.value)}>
                     <option value ="" disabled> Select a class</option>
-                    <option 
-                        type = "text"
-                        value = {course}
-                        // hard code this id here 
-                        onChange = {(e) => setCourse(e.target.value)}
-                    >English 100: Test Class</option> 
+                    {classes && classes.map((course, index) => (
+                        <option value = {course._id} > {course.courseNumber}: {course.className} </option>
+                    ))}
                     
                  </select>
                 
@@ -149,10 +136,10 @@ const CreateLesson = () => {
                             value = {card.translation}
                         
                         />
-                        <button onClick = {()=> deleteCard(index)}> Delete </button>
+                        <button type = "button" onClick = {()=> deleteCard(index)}> Delete </button>
                     </div>
                     )}
-                    <button onClick = {addCard}>Add a card </button>
+                    <button type= "button" onClick = {addCard}>Add a card </button>
                 </div>
                 <button> Create a lesson </button>
             </form>

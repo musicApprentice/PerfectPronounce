@@ -11,56 +11,55 @@ import { BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import AdminLessonPage from "./components/admin/lessons/lessonsPage";
 import AdminAssignmentPage from "./components/admin/assignments/assignmentPage";
 import PracticeAssignment from "./components/admin/practice/practice";
-
+import { AuthProvider } from "./AuthContext";
+import ProtectedRoute from "./ProtectedRoute"
+import UserDashboard from "./components/student/studentDashboard";
+import LandingPage from "./components/universal/landingPage";
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  /*We need to make a navbar component for the login 
+    We also need a sidebar component for logged-in case
+    The main screen is probably Assignments Due 
+    Each component should follow the model of studentDashboard
 
-  const handleLogin = () => {
-    setIsAuthenticated(true)
-  }
+    token for session is the next step
+  */
+
 
   return (
-    <Router>
-      <div className="App">
-      <h1> Language Maestro</h1>
+    <AuthProvider>
+      <Router>
+        <div className="App">
+        {/* <h3> Language Maestro</h3> */}
 
-      {!isAuthenticated &&
-        <nav>
-     
-          <ul>
-            <h2>
-              <Link to="/createAccount">Create Account</Link>
-            </h2>
-            <h2>
-              <Link to="/login">Login to Account</Link>
-            </h2>
-         
-          </ul>
-        </nav>
-        }
+      
+        <LandingPage></LandingPage>
+          
 
-        <Routes>
-                <Route path="/createAccount" element={<CreateUser />} />
-                <Route path="/login" element={<Login onLogin = {handleLogin} />} />
-                <Route path="/admin" element={<AdminLayout />}>
-                    <Route path="users" element={<AdminUserPage />} />
-                    {/* <Route path="users/:id" element={<UserDetails />} /> */}
-                    <Route path="classes" element={<AdminClassPage />}/>
-                    <Route path="lessons" element={<AdminLessonPage />} />
-                    <Route path="assignments" element={<AdminAssignmentPage />} />
-                    <Route path="practice" element={<PracticeAssignment/>} />
+          <Routes>
 
-                </Route>
-                <Route path="/student" element={<StudentLayout />}>
-                 
-                </Route>
-                <Route path="/teacher" element={<TeacherLayout />}>
-             
-                </Route>
-            </Routes>
-      </div>
-    </Router>
+                  <Route path="/createAccount" element={<CreateUser />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/admin" element={<AdminLayout />}>
+                      <Route path="users" element={<AdminUserPage />} />
+                      {/* <Route path="users/:id" element={<UserDetails />} /> */}
+                      <Route path="classes" element={<AdminClassPage />}/>
+                      <Route path="lessons" element={<AdminLessonPage />} />
+                      <Route path="assignments" element={<AdminAssignmentPage />} />
+                      <Route path="practice" element={<PracticeAssignment/>} />
+
+                  </Route>
+
+                  <Route path="/student" element={<ProtectedRoute> <UserDashboard /></ProtectedRoute>}>
+                  </Route>
+                  <Route path="/teacher" element={<TeacherLayout />}>
+              
+                  </Route>
+              </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
+
 
 export default App;

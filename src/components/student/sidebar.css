@@ -1,0 +1,85 @@
+.sidebar {
+    background-color: #f5f5f5;
+    padding: 50px;
+    /* Padding is the amount of space around the element IN ADDITION to the width */
+    width: 200px;
+    /* Width does not include padding */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* Horizontal offset, Vertical offset, blur radius, color of shadow */
+    height: 100vh;
+    /* 100vh is the height of the screen */
+    display: flex;
+    /* container becomes a flex container and its direct child elements become "flex-items */
+    /* Allows for adaption to different screen sizes  */
+    /* {display: block} takes up the full width with a line break before and after */
+    flex-direction: column;
+    /* items are stacked on top of one another in a column */
+    /* other options are row, reverse etc */
+    justify-content: flex-start;
+    /* space-between, space-evenly etc */
+    position: fixed;
+    /* used for creating sticky elements that are always visible to the user */
+    top: 0;
+    /* positions element at the top of the viewport */
+    left: 0; 
+    /* positions element at the left edge of viewport */
+    z-index: 1000;
+    /* deals with the stacking of elements in the z-dimension
+    higher integers will be in front  */
+    transition: width 0.3s ease; /* Smooth transition for expanding/collapsing */
+}
+
+.sidebar.collapsed {
+    width: 0px; /* Narrower width when collapsed */
+    padding: 0px; /* Adjust padding */
+}
+
+.sidebar-toggle {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    align-self: flex-start; 
+}
+
+.sidebar-logo {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #007bff;
+    text-decoration: none;
+    padding: 10px 0;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.sidebar-logo:hover {
+    background-color: #e0e0e0;
+}
+
+.sidebar h5 {
+    margin: 15px 0;
+    font-weight: 500;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+    padding: 10px 15px;
+    display: block;
+    width: calc(100%); /* Extend hover area to full width */
+    margin-left: -10px; /* Adjust position for extended hover area */
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.sidebar a:hover {
+    background-color: #e0e0e0;
+    color: #007bff;
+}

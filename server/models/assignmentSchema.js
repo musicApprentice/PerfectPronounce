@@ -10,6 +10,7 @@ const assignmentSchema = new mongoose.Schema({
     attemptScores: [{type: mongoose.Schema.ObjectId, ref: 'AttemptGrade'}],
     assignmentScores: [{type: mongoose.Schema.ObjectId, ref: "AssignmentScores"}],
 
+    class: {type: mongoose.Schema.ObjectId, ref: "Class"},
     minAttempts: {type: Number},
     goalAverage: {type: Number},
     scoringType: {type:String},

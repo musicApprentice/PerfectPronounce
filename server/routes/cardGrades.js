@@ -1,4 +1,3 @@
-const CardGrades = require("../models/gradesSchema");
 const express = require('express')
 const router = express.Router();
 

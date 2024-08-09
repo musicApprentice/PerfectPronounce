@@ -2,44 +2,57 @@ import React, {useState, useEffect} from 'react';
 
 const ViewAssignments = () => {
     //define getters and setters
-    const [assignments, setAssignments] = useState([]);
+    const [lessons, setLessons] = useState([]);
     const [searchTerm, setSearchTerm] = useState("")
     //To be added later on 
 
     useEffect(()=> {
-        fetchClasses();
+        fetchLessons();
     })
 
-    const fetchClasses = () => {
-        fetch("http://localhost:3000/api/assignments", {
+    const fetchLessons = () => {
+        fetch("http://localhost:3000/api/lessons", {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json'
             }
         })
         .then(response => response.json())
-        .then(data => setAssignments(data))
-        .catch(error => console.error(error,"Error fetching classes"))
+        .then(data => setLessons(data))
+        .catch(error => console.error(error,"Error fetching lessons"))
 
 
+    }
+
+    const deleteLesson = (deleteLesson) => {
+        if (window.confirm("You are about to delete this lesson")) {
+            fetch(`http://localhost:3000/api/lessons/id/${deleteLesson._id}`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(setLessons(lessons.filter((lesson)=> lesson._id !== deleteLesson._id)))
+        }
     }
 
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value)
     }
 
-    const filteredAssignment = assignments.filter(assignment => 
-        assignment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        assignment.language.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredLessons = lessons
+    .filter(lesson => 
+        lesson.name && lesson.name.toLowerCase().includes(searchTerm.toLowerCase()) 
     );
     return (
         <div>
         <h3> Lesson Database </h3>
-            <label htmlFor = "assignmentSearch"> Search for Lessons:</label>
+            <label htmlFor = "lessonSearch"> Search for Lessons:</label>
             <input
-                id = "assignmentSearch"
+                id = "lessonSearch"
                 type = "search"
-                placeholder = "Search for assignments..."
+                placeholder = "Search for lessons..."
                 value = {searchTerm}
                 onChange = {handleSearchChange}
             />
@@ -47,9 +60,11 @@ const ViewAssignments = () => {
             <h3></h3>
 
             <div>
-                {filteredAssignment.map((assignment, index) => (
+                {filteredLessons.map((lesson, index) => (
                     <div key = {index}>
-                        {assignment.name}-{assignment.language}
+                        {lesson.name}--
+                        <button onClick = {() => deleteLesson(lesson)}> Delete </button>
+
                     </div>
                 ))}
             </div>
