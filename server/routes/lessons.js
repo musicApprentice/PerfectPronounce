@@ -40,6 +40,8 @@ router.route('/')
             return res.status(400).send({error: "class not found"})
         }
         
+
+        //TODO:courseList should be replaced with targetLesson
         await User.updateMany(
             {_id: {$in: targetClass.students}}, //find where the _id matches any of the documents in students
             {$addToSet: {courseList: targetClass._id}} //adds to the set (no duplicates) and updates the courseList field
