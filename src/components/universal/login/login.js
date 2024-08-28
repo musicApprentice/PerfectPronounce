@@ -52,15 +52,15 @@ const Login = ({onLogin}) => {
 
   return (
     <form onSubmit={handleSubmit}>
-        <h1> Login </h1>
+        <h2> Login </h2>
 
        <div>
         <label htmlFor="roles">Select a Role</label>
         <select id="roles" value={role} onChange={handleRoleChange} required>
             <option value="" disabled>Select a role</option>
             <option value="Admin">Admin</option>
-            <option value="Student">Student</option>
-            <option value="Teacher">Teacher</option>
+            {/* <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option> */}
         </select>
      </div>
      

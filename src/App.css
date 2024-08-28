@@ -1,28 +1,31 @@
 .App {
   text-align: center;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #333333;
 }
-
 
 nav {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
-  background-color: #ffffff;
-  padding: 10px;
-  border-bottom: 1px solid #000000;
+  background-color: #f9f9f9;
+  padding: 10px 20px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 nav h1 {
   grid-column: 1 / -1;
   justify-self: center;
   margin: 0;
-  font-size: 2em;
+  font-size: 1.8em;
+  color: #333333;
+  font-weight: 600;
 }
 
 nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  gap: 15px;
   padding: 0;
   margin: 0;
   grid-column: 2;
@@ -30,20 +33,30 @@ nav ul {
 
 nav ul h2 {
   margin: 0;
+  font-size: 1em;
+  font-weight: 500;
 }
 
 nav ul h2 a {
   text-decoration: none;
-  color: #000000;
-  background-color: transparent;
-  padding: 4px 8px;
+  color: #333333;
+  padding: 6px 12px;
   border-radius: 4px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul h2 a:hover {
-  background-color: #000000;
+  background-color: navy;
   color: #ffffff;
 }
 
-
+h3 {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: navy;
+  text-align: center;
+  margin: 20px 0;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

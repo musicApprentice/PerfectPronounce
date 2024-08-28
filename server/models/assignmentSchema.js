@@ -9,7 +9,7 @@ const assignmentSchema = new mongoose.Schema({
     cardScores: [{type: mongoose.Schema.ObjectId, ref: "Grades"}],
     attemptScores: [{type: mongoose.Schema.ObjectId, ref: 'AttemptGrade'}],
     assignmentScores: [{type: mongoose.Schema.ObjectId, ref: "AssignmentScores"}],
-
+    dueDate: {type: Date},
     class: {type: mongoose.Schema.ObjectId, ref: "Class"},
     minAttempts: {type: Number},
     goalAverage: {type: Number},

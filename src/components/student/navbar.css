@@ -2,6 +2,7 @@
     background-color: white;
     color: #333;
     padding: 10px;
+    /* padding adds thickness on all sides */
     display: flex;
     justify-content: flex-end;
     position: fixed; /* Make the navbar fixed */
@@ -18,7 +19,7 @@
 }
 
 .dropdown-icon {
-    background-color: #007bff;
+    background-color: navy;
     color: #fff;
     border-radius: 50%;
     width: 40px;

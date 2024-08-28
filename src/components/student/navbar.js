@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = ({ userId }) => {
     const { handleLogout } = useAuth();
-    const navigate = useNavigate(); // Hook should be at the top level
+    const navigate = useNavigate(); 
 
     const handleLogoutAndNavigate = () => {
-        handleLogout();  // Call the logout function
-        navigate('/');   // Navigate to the main page
+        handleLogout();  // Call the logout function from AuthContext
+        navigate('/');   // Navigate to the landing page (login/create account)
     };
 
     return (

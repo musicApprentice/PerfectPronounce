@@ -4,7 +4,7 @@
     /* Padding is the amount of space around the element IN ADDITION to the width */
     width: 200px;
     /* Width does not include padding */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
     /* Horizontal offset, Vertical offset, blur radius, color of shadow */
     height: 100vh;
     /* 100vh is the height of the screen */
@@ -26,48 +26,37 @@
     z-index: 1000;
     /* deals with the stacking of elements in the z-dimension
     higher integers will be in front  */
-    transition: width 0.3s ease; /* Smooth transition for expanding/collapsing */
+    transition: width 0.5s ease; /* Smooth transition for expanding/collapsing */
 }
 
 .sidebar.collapsed {
-    width: 0px; /* Narrower width when collapsed */
-    padding: 0px; /* Adjust padding */
+    width: 0px; /* No width when collapsed */
+    padding: 0px; /* No padding when collapsed*/
 }
 
 .sidebar-toggle {
-    background-color: #007bff;
+    background-color: navy;
     color: white;
     border: none;
     width: 30px;
     height: 30px;
     margin-bottom: 20px;
+    /* Space between this object and the one below it */
     cursor: pointer;
     align-self: flex-start; 
 }
 
-.sidebar-logo {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 18px;
-    font-weight: 700;
-    color: #007bff;
-    text-decoration: none;
-    padding: 10px 0;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.sidebar-logo:hover {
-    background-color: #e0e0e0;
-}
 
 .sidebar h5 {
     margin: 15px 0;
     font-weight: 500;
 }
 
+/* 
+sidebar a targets anchor <a> elements that are descendants of the sidebar class
+the link component creates/ is rendered as an <a> tag in the DOM
+
+*/
 .sidebar a {
     text-decoration: none;
     color: #333;
@@ -81,5 +70,10 @@
 
 .sidebar a:hover {
     background-color: #e0e0e0;
-    color: #007bff;
+    color: navy;
+}
+
+.sidebar a.active {
+    background-color: navy;
+    color: white;
 }

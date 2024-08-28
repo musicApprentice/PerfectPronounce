@@ -55,7 +55,7 @@ const CreateUser = () => {
 
   return (
     <div>
-      <h1> Create Account </h1>
+      <h2> Create Account </h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="roles">Select a Role</label>

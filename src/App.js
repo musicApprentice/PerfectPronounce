@@ -29,7 +29,7 @@ function App() {
     <AuthProvider>
       <Router>
         <div className="App">
-        {/* <h3> Language Maestro</h3> */}
+        <h3> Perfect Pronounce</h3>
 
       
         <LandingPage></LandingPage>
@@ -39,7 +39,7 @@ function App() {
 
                   <Route path="/createAccount" element={<CreateUser />} />
                   <Route path="/login" element={<Login />} />
-                  <Route path="/admin" element={<AdminLayout />}>
+                  <Route path="/admin" element={<ProtectedRoute> <UserDashboard /></ProtectedRoute>}>
                       <Route path="users" element={<AdminUserPage />} />
                       {/* <Route path="users/:id" element={<UserDetails />} /> */}
                       <Route path="classes" element={<AdminClassPage />}/>
@@ -49,8 +49,7 @@ function App() {
 
                   </Route>
 
-                  <Route path="/student" element={<ProtectedRoute> <UserDashboard /></ProtectedRoute>}>
-                  </Route>
+                  <Route path="/student" element={<ProtectedRoute> <UserDashboard /></ProtectedRoute>}></Route>
                   <Route path="/teacher" element={<TeacherLayout />}>
               
                   </Route>
